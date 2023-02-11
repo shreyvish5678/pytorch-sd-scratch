@@ -10,13 +10,13 @@ class Encoder(nn.Sequential):
             nn.Conv2d(3, 128, kernel_size=3, padding=1),
             ResidualBlock(128, 128),
             ResidualBlock(128, 128),
-            nn.Conv2d(128, 128, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(128, 128, kernel_size=3, stride=2, padding=0),
             ResidualBlock(128, 256),
             ResidualBlock(256, 256),
-            nn.Conv2d(256, 256, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(256, 256, kernel_size=3, stride=2, padding=0),
             ResidualBlock(256, 512),
             ResidualBlock(512, 512),
-            nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=0),
             ResidualBlock(512, 512),
             ResidualBlock(512, 512),
             ResidualBlock(512, 512),
@@ -30,6 +30,8 @@ class Encoder(nn.Sequential):
 
     def forward(self, x, noise):
         for module in self:
+            if getattr(module, 'stride', None) == (2, 2):  # Padding at downsampling should be asymmetric (see #8)
+                x = F.pad(x, (0, 1, 0, 1))
             x = module(x)
 
         mean, log_variance = torch.chunk(x, 2, dim=1)
