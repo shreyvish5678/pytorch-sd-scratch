@@ -3,7 +3,6 @@ from torch import nn
 from torch.nn import functional as F
 from .attention import SelfAttention, CrossAttention
 
-
 class TimeEmbedding(nn.Module):
     def __init__(self, n_embd):
         super().__init__()
@@ -73,8 +72,8 @@ class AttentionBlock(nn.Module):
         x = self.conv_input(x)
         
         n, c, h, w = x.shape
-        x = x.view((n, c, h * w))   # (n, c, hw)
-        x = x.transpose(-1, -2)  # (n, hw, c)
+        x = x.view((n, c, h * w))   
+        x = x.transpose(-1, -2)  
 
         residue_short = x
         x = self.layernorm_1(x)
@@ -93,8 +92,8 @@ class AttentionBlock(nn.Module):
         x = self.linear_geglu_2(x)
         x += residue_short
 
-        x = x.transpose(-1, -2)  # (n, c, hw)
-        x = x.view((n, c, h, w))    # (n, c, h, w)
+        x = x.transpose(-1, -2) 
+        x = x.view((n, c, h, w))   
 
         return self.conv_output(x) + residue_long
 
@@ -154,6 +153,7 @@ class UNet(nn.Module):
             SwitchSequential(ResidualBlock(640, 320), AttentionBlock(8, 40)),
             SwitchSequential(ResidualBlock(640, 320), AttentionBlock(8, 40)),
         ])
+
 
     def forward(self, x, context, time):
         skip_connections = []

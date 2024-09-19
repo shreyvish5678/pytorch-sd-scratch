@@ -108,8 +108,8 @@ def generate(
         clip = models.get('clip') or model_loader.load_clip(device)
         clip.to(device)
 
-        # use the dtype of the model weights as our dtype
         dtype = clip.embedding.position_value.dtype
+        print(f"Using dtype: {dtype}")
         if do_cfg:
             cond_tokens = tokenizer.encode_batch(prompts)
             cond_tokens = torch.tensor(cond_tokens, dtype=torch.long, device=device)
@@ -183,7 +183,6 @@ def generate(
             input_latents = latents * sampler.get_input_scale()
             if do_cfg:
                 input_latents = input_latents.repeat(2, 1, 1, 1)
-
             output = diffusion(input_latents, context, time_embedding)
             if do_cfg:
                 output_cond, output_uncond = output.chunk(2)

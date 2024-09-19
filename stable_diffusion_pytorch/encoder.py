@@ -30,7 +30,7 @@ class Encoder(nn.Sequential):
 
     def forward(self, x, noise):
         for module in self:
-            if getattr(module, 'stride', None) == (2, 2):  # Padding at downsampling should be asymmetric (see #8)
+            if getattr(module, 'stride', None) == (2, 2): 
                 x = F.pad(x, (0, 1, 0, 1))
             x = module(x)
 

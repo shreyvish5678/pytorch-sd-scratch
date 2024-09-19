@@ -3,7 +3,6 @@ from . import Tokenizer, CLIP, Encoder, Decoder, Diffusion
 from . import util
 import warnings
 
-
 def make_compatible(state_dict):
     keys = list(state_dict.keys())
     changed = False
@@ -31,42 +30,42 @@ def make_compatible(state_dict):
 
     return state_dict
 
-def load_clip(device):
+def load_clip(device, dtype=torch.float32):
     state_dict = torch.load(util.get_file_path('ckpt/clip.pt'))
     state_dict = make_compatible(state_dict)
 
-    clip = CLIP().to(device)
+    clip = CLIP().to(device, dtype=dtype)
     clip.load_state_dict(state_dict)
     return clip
 
-def load_encoder(device):
+def load_encoder(device, dtype=torch.float32):
     state_dict = torch.load(util.get_file_path('ckpt/encoder.pt'))
     state_dict = make_compatible(state_dict)
 
-    encoder = Encoder().to(device)
+    encoder = Encoder().to(device, dtype=dtype)
     encoder.load_state_dict(state_dict)
     return encoder
 
-def load_decoder(device):
+def load_decoder(device, dtype=torch.float32):
     state_dict = torch.load(util.get_file_path('ckpt/decoder.pt'))
     state_dict = make_compatible(state_dict)
 
-    decoder = Decoder().to(device)
+    decoder = Decoder().to(device, dtype=dtype)
     decoder.load_state_dict(state_dict)
     return decoder
 
-def load_diffusion(device):
+def load_diffusion(device, dtype=torch.float32):
     state_dict = torch.load(util.get_file_path('ckpt/diffusion.pt'))
     state_dict = make_compatible(state_dict)
 
-    diffusion = Diffusion().to(device)
+    diffusion = Diffusion().to(device, dtype=dtype)
     diffusion.load_state_dict(state_dict)
     return diffusion
 
-def preload_models(device):
+def preload_models(device, dtype=torch.float32):
     return {
-        'clip': load_clip(device),
-        'encoder': load_encoder(device),
-        'decoder': load_decoder(device),
-        'diffusion': load_diffusion(device),
+        'clip': load_clip(device, dtype),
+        'encoder': load_encoder(device, dtype),
+        'decoder': load_decoder(device, dtype),
+        'diffusion': load_diffusion(device, dtype),
     }

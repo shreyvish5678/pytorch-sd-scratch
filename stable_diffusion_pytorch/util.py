@@ -22,9 +22,9 @@ def get_file_path(filename, url=None):
 
 def move_channel(image, to):
     if to == "first":
-        return image.permute(0, 3, 1, 2)  # (N, H, W, C) -> (N, C, H, W)
+        return image.permute(0, 3, 1, 2)  
     elif to == "last":
-        return image.permute(0, 2, 3, 1)  # (N, C, H, W) -> (N, H, W, C)
+        return image.permute(0, 2, 3, 1)  
     else:
         raise ValueError("to must be one of the following: first, last")
 

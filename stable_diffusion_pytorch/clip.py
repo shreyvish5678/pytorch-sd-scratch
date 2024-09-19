@@ -33,7 +33,7 @@ class CLIPLayer(nn.Module):
         residue = x
         x = self.layernorm_2(x)
         x = self.linear_1(x)
-        x = x * torch.sigmoid(1.702 * x)   # QuickGELU activation function
+        x = x * torch.sigmoid(1.702 * x)   
         x = self.linear_2(x)
         x += residue
 

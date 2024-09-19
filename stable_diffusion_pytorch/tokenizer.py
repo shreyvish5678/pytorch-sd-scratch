@@ -12,9 +12,9 @@ def create_bytes_table() -> dict:
     special_count = 0
     for byte in range(256):
         category = unicodedata.category(chr(byte))
-        if category[0] not in ['C', 'Z']:      # ith character is NOT control char or space
+        if category[0] not in ['C', 'Z']:     
             table[byte] = chr(byte)
-        else:                                  # ith character IS control char or space
+        else:                              
             table[byte] = chr(special_count + 256)
             special_count += 1
     return table

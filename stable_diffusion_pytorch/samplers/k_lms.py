@@ -42,7 +42,6 @@ class KLMSSampler():
         self.outputs = [output] + self.outputs[:self.lms_order - 1]
         order = len(self.outputs)
         for i, output in enumerate(self.outputs):
-            # Integrate polynomial by trapezoidal approx. method for 81 points.
             x = np.linspace(self.sigmas[t], self.sigmas[t + 1], 81)
             y = np.ones(81)
             for j in range(order):
