@@ -3,14 +3,10 @@ import torch
 dtype = torch.float16
 models = model_loader.preload_models('cpu', dtype=dtype)
 
-for param in models["clip"].parameters():
-    print(param.dtype)
-    break
-
 prompt = "A painting of a cat"  
 uncond_prompt = ""  
 size = 512
-n_inference_steps = 50
+n_inference_steps = 30
 
 prompts = [prompt]
 uncond_prompts = [uncond_prompt] if uncond_prompt else None

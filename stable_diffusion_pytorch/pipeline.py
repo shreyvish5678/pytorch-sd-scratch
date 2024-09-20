@@ -24,52 +24,6 @@ def generate(
         device=None,
         idle_device=None
 ):
-    r"""
-    Function invoked when calling the pipeline for generation.
-    Args:
-        prompts (`List[str]`):
-            The prompts to guide the image generation.
-        uncond_prompts (`List[str]`, *optional*, defaults to `[""] * len(prompts)`):
-            The prompts not to guide the image generation. Ignored when not using guidance (i.e. ignored if
-            `do_cfg` is False).
-        input_images (List[Union[`PIL.Image.Image`, str]]):
-            Images which are served as the starting point for the image generation.
-        strength (`float`, *optional*, defaults to 0.8):
-            Conceptually, indicates how much to transform the reference `input_images`. Must be between 0 and 1.
-            `input_images` will be used as a starting point, adding more noise to it the larger the `strength`.
-            The number of denoising steps depends on the amount of noise initially added. When `strength` is 1,
-            added noise will be maximum and the denoising process will run for the full number of iterations
-            specified in `n_inference_steps`. A value of 1, therefore, essentially ignores `input_images`.
-        do_cfg (`bool`, *optional*, defaults to True):
-            Enable [classifier-free guidance](https://arxiv.org/abs/2207.12598).
-        cfg_scale (`float`, *optional*, defaults to 7.5):
-            Guidance scale of classifier-free guidance. Ignored when it is disabled (i.e. ignored if
-            `do_cfg` is False). Higher guidance scale encourages to generate images that are closely linked
-            to the text `prompt`, usually at the expense of lower image quality.
-        height (`int`, *optional*, defaults to 512):
-            The height in pixels of the generated image. Ignored when `input_images` are provided.
-        width (`int`, *optional*, defaults to 512):
-            The width in pixels of the generated image. Ignored when `input_images` are provided.
-        sampler (`str`, *optional*, defaults to "k_lms"):
-            A sampler to be used to denoise the encoded image latents. Can be one of `"k_lms"`, `"k_euler"`,
-            or `"k_euler_ancestral"`.
-        n_inference_steps (`int`, *optional*, defaults to 50):
-            The number of denoising steps. More denoising steps usually lead to a higher quality image at the
-            expense of slower inference. This parameter will be modulated by `strength`.
-        models (`Dict[str, torch.nn.Module]`, *optional*):
-            Preloaded models. If some or all models are not provided, they will be loaded dynamically.
-        seed (`int`, *optional*):
-            A seed to make generation deterministic.
-        device (`str` or `torch.device`, *optional*):
-            PyTorch device which the image generation happens. If not provided, 'cuda' or 'cpu' will be used.
-        idle_device (`str` or `torch.device`, *optional*):
-            PyTorch device which the models no longer in use are moved to.
-    Returns:
-        `List[PIL.Image.Image]`:
-            The generated images.
-    Note:
-        This docstring is heavily copied from huggingface/diffusers.
-    """
     with torch.no_grad():
         if not isinstance(prompts, (list, tuple)) or not prompts:
             raise ValueError("prompts must be a non-empty list or tuple")
@@ -109,7 +63,6 @@ def generate(
         clip.to(device)
 
         dtype = clip.embedding.position_value.dtype
-        print(f"Using dtype: {dtype}")
         if do_cfg:
             cond_tokens = tokenizer.encode_batch(prompts)
             cond_tokens = torch.tensor(cond_tokens, dtype=torch.long, device=device)
