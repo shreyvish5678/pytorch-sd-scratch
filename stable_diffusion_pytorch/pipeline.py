@@ -6,6 +6,7 @@ from . import Tokenizer
 from . import KLMSSampler, KEulerSampler, KEulerAncestralSampler
 from . import util
 from . import model_loader
+import gradio as gr
 
 
 def generate(
@@ -22,7 +23,8 @@ def generate(
         models={},
         seed=None,
         device=None,
-        idle_device=None
+        idle_device=None,
+        progress=None   
 ):
     with torch.no_grad():
         if not isinstance(prompts, (list, tuple)) or not prompts:
@@ -142,6 +144,9 @@ def generate(
                 output = cfg_scale * (output_cond - output_uncond) + output_uncond
 
             latents = sampler.step(latents, output)
+            progress((i + 1) / len(sampler.timesteps), desc="Generating image...")
+
+        progress(1, desc="Decoding image...")
 
         to_idle(diffusion)
         del diffusion

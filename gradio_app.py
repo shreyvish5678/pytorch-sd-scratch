@@ -3,12 +3,15 @@ from stable_diffusion_pytorch import model_loader, pipeline
 import torch
 from PIL import Image
 
-dtype = torch.bfloat16
+dtype = torch.float16
 models = model_loader.preload_models('cpu', dtype=dtype)
 
-def generate_image(prompt, uncond_prompt, n_inference_steps):
+def generate_image(prompt, uncond_prompt, n_inference_steps, progress=gr.Progress()):
     prompts = [prompt]
     uncond_prompts = [uncond_prompt] if uncond_prompt else None
+
+    progress(0, desc="Generating image...")
+
     output = pipeline.generate(
         prompts=prompts, 
         uncond_prompts=uncond_prompts,
@@ -17,7 +20,8 @@ def generate_image(prompt, uncond_prompt, n_inference_steps):
         n_inference_steps=n_inference_steps,
         models=models, 
         device='cuda', 
-        idle_device='cpu'
+        idle_device='cpu', 
+        progress=progress
     )[0]
 
     return output
