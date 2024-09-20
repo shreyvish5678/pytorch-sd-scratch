@@ -31,7 +31,7 @@ def make_compatible(state_dict):
     return state_dict
 
 def load_clip(device, dtype=torch.float32):
-    state_dict = torch.load(util.get_file_path('stable-diffusion-pt/clip.pt'))
+    state_dict = torch.load(util.get_file_path('./clip.pt'))
     state_dict = make_compatible(state_dict)
 
     clip = CLIP().to(device, dtype=dtype)
@@ -39,7 +39,7 @@ def load_clip(device, dtype=torch.float32):
     return clip
 
 def load_encoder(device, dtype=torch.float32):
-    state_dict = torch.load(util.get_file_path('stable-diffusion-pt/encoder.pt'))
+    state_dict = torch.load(util.get_file_path('./encoder.pt'))
     state_dict = make_compatible(state_dict)
 
     encoder = Encoder().to(device, dtype=dtype)
@@ -47,7 +47,7 @@ def load_encoder(device, dtype=torch.float32):
     return encoder
 
 def load_decoder(device, dtype=torch.float32):
-    state_dict = torch.load(util.get_file_path('stable-diffusion-pt/decoder.pt'))
+    state_dict = torch.load(util.get_file_path('./decoder.pt'))
     state_dict = make_compatible(state_dict)
 
     decoder = Decoder().to(device, dtype=dtype)
@@ -55,7 +55,7 @@ def load_decoder(device, dtype=torch.float32):
     return decoder
 
 def load_diffusion(device, dtype=torch.float32):
-    state_dict = torch.load(util.get_file_path('stable-diffusion-pt/diffusion.pt'))
+    state_dict = torch.load(util.get_file_path('./diffusion.pt'))
     state_dict = make_compatible(state_dict)
 
     diffusion = Diffusion().to(device, dtype=dtype)
