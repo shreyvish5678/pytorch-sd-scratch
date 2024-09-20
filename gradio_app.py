@@ -35,4 +35,4 @@ gr.Interface(
     ],
     outputs=gr.Image(label="Generated Image"),
     title="Stable Diffusion Generator"
-).launch()
+).launch(share=True)
